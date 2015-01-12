@@ -1,0 +1,29 @@
+<h1>Listing airvms</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Encrypted user</th>
+      <th>Encrypted password</th>
+      <th>Host</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @airvms.each do |airvm| %>
+      <tr>
+        <td><%= airvm.encrypted_user %></td>
+        <td><%= airvm.encrypted_password %></td>
+        <td><%= airvm.host %></td>
+        <td><%= link_to 'Show', airvm %></td>
+        <td><%= link_to 'Edit', edit_airvm_path(airvm) %></td>
+        <td><%= link_to 'Destroy', airvm, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Airvm', new_airvm_path %>

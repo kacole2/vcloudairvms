@@ -1,0 +1,45 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ * @import url("https://fonts.googleapis.com/css?family=Lato:400,700,900,400italic");
+ *= require_tree .
+ *= require_self
+ */
+
+
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+a, p, h1, h2, h3, h4, h5, h6 {
+	font-family: 'Raleway', sans-serif;
+}
+
+body {
+	padding-top: 50px;
+}
+
+.eachvm {
+	list-style: none;
+	display: block;
+	margin: none;
+}
+
+.eachvm li {
+	margin-right: auto;
+  	margin-left: auto;
+  	padding: 10px;
+  	float: left;
+  	margin: 1%;
+  	border-radius: 8px;
+  	border: 5px solid black;
+  	background-color: rgba(232, 228, 228, 0.9);
+  	transition-duration: .5s;
+}

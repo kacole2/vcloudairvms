@@ -1,0 +1,218 @@
+<div class="row">
+	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 col-lg-offset-2 col-md-offset-2 col-sm-offset-2">
+		<center>
+    		<h3><img src="<%= asset_path('vcloudairlogo.png') %>" style="width:100px;">vCloud Air VMs</h3>
+		</center>
+	</div>
+	<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4">
+		<br>
+		<h5>username: <%= @airvm.user %><br>
+		host: <%= @airvm.host %></h5>
+	</div>
+</div>
+<br>
+<br>
+<div class="row">
+	<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3 col-lg-offset-1 col-md-offset-1 col-sm-offset-1">
+		<div class="well">
+			<fieldset><legend><h4>Choose an Organization</h4></legend></fieldset>
+				<form class="form-horizontal" role="form">
+					<div class="form-group">
+						<div class="col-lg-4 col-lg-offset-1">
+							<select size="5" name="organizations" id="organizations">
+								<% @organizations.each do |org| %>
+									<option class="form-control"><p><%= org.name %></p></option>
+								<% end %>
+							</select>
+						</div>
+					</div>
+				</form>
+		</div>
+	</div>
+
+	<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+		<div id="VDCForm">
+			<div class="well">
+				<fieldset><legend><h4>Choose a VDC</h4></legend></fieldset>
+					<center>
+						<img src="<%= asset_path('loader.gif') %>" style="width:100px;" class="vdcloader">
+					</center>
+					
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<div class="col-lg-4 col-lg-offset-1">
+								<select size="5" name="vms" id="vdcs">
+									
+								</select>
+							</div>
+						</div>
+					</form>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-xs-4 col-sm-3 col-md-3 col-lg-3">
+		<div id="vAppForm">
+			<div class="well">
+				<fieldset><legend><h4>Choose a vApp</h4></legend></fieldset>
+					<center>
+						<img src="<%= asset_path('loader.gif') %>" style="width:100px;" class="vapploader">
+					</center>
+					
+					<form class="form-horizontal" role="form">
+						<div class="form-group">
+							<div class="col-lg-4 col-lg-offset-1">
+								<select size="5" name="vms" id="vapps">
+									
+								</select>
+							</div>
+						</div>
+					</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<br>
+
+<div id="vAppDetailsContainer">
+	<div class="row">
+		<center><h3 class="vappname"> </h3></center>
+	</div>
+	<div class="row">
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1">
+			<center>
+				<img src="<%= asset_path('loader.gif') %>" style="width:100px;" class="vapp2loader">
+			</center>
+			<p>
+				<span id="vappdesc"></span><br>
+				<span id="vappowner"></span><br>
+				<span id="vappnet"></span><br>
+			</p>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="col-xs-10 col-sm-10 col-md-10 col-lg-10 col-lg-offset-1 col-md-offset-1 col-sm-offset-1">
+			<ul class="eachvm">
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="row">
+ <center>
+ 	<%= link_to "Destroy", @airvm, method: :delete, data: { confirm: "This will remove your encrypted username and password from this site. OK?" }, class: "btn btn-danger btn-lg" %>
+ </center>
+
+<script type="text/javascript">
+$( document ).ready(function() {
+    $("#VDCForm").hide();
+    $("#vAppForm").hide();
+    $("#vAppDetailsContainer").hide();
+
+
+
+	 $("#organizations").change(function(){ 
+	 	org = $(this).val()
+	 	$("#vdcs").empty();
+	 	$("#vapps").empty();
+	 	$(".vappname").empty();
+		$("#vappdesc").empty();
+		$("#vappowner").empty();
+		$("#vappnet").empty();
+		$(".eachvm").empty();
+		$("#VDCForm").show();
+		$("#vdcs").hide();
+      	$.ajax({
+                   url: "<%= getVdcsFromOrg_airvm_path %>", // Route to the Script Controller method
+                  type: "GET",
+              dataType: "json",
+                  data: {  user: "<%= @airvm.user %>", password: "<%= @airvm.password %>", host: "<%= @airvm.host %>", org: org },
+              complete: function() {},
+               success: function(data) {
+               				$(".vdcloader").hide();
+                          	$.each(data, function(i, item) {
+    							$('#vdcs').append('<option class="form-control"><p>' + item.name + '</p></option>' );
+							});
+							$("#vdcs").show();
+                        },
+                 error: function() {
+                          alert("Ajax error!")
+                        }
+      	});
+  	});
+
+	$("#vdcs").change(function(){ 
+		vdc = $(this).val()
+		$(".vapps").empty();
+		$(".vappname").empty();
+		$("#vappdesc").empty();
+		$("#vappowner").empty();
+		$("#vappnet").empty();
+		$(".eachvm").empty();
+		$("#vAppForm").show();
+		$('#vapps').hide();
+      	$.ajax({
+                   url: "<%= getvAppsFromVDC_airvm_path %>", // Route to the Script Controller method
+                  type: "GET",
+              dataType: "json",
+                  data: {  user: "<%= @airvm.user %>", password: "<%= @airvm.password %>", host: "<%= @airvm.host %>", org: org, vdc: vdc },
+              complete: function() {},
+               success: function(data) {
+               				$(".vapploader").hide();
+                          	$.each(data, function(i, item) {
+    							$('#vapps').append('<option class="form-control"><p>' + item.name + '</p></option>' );
+							});
+							$('#vapps').show();
+                        },
+                 error: function() {
+                          alert("Ajax error!")
+                        }
+      	});
+  	});
+
+  	$("#vapps").change(function(){ 
+		vapp = $(this).val()
+		$(".vappname").empty();
+		$("#vappdesc").empty();
+		$("#vappowner").empty();
+		$("#vappnet").empty();
+		$(".eachvm").empty();
+		$("#vAppDetailsContainer").show();
+		$(".vapp2loader").show();
+      	$.ajax({
+                   url: "<%= getVMFromvApps_airvm_path %>", // Route to the Script Controller method
+                  type: "GET",
+              dataType: "json",
+                  data: {  user: "<%= @airvm.user %>", password: "<%= @airvm.password %>", host: "<%= @airvm.host %>", org: org, vdc: vdc,  vapp: vapp},
+              complete: function() {},
+               success: function(data) {
+               				$(".vapp2loader").hide();
+               				$(".vappname").append(data.vappname);
+               				$("#vappowner").append('vApp Owner:  ' + data.vappowner);
+               				$("#vappdesc").append('vApp Description: ' + data.description);
+               				$("#vappnet").append('vApp Network : ' + data.network);
+                          	$.each(data.vms, function(i, item) {
+                          		jsonvmhdd = JSON.stringify(item.vmhdd).replace('[','').replace(']','').replace('{','').replace('}','').replace('"','').replace('"','');
+    							$('.eachvm').append(
+    								'<li><center><img src="http://a.fsdn.com/allura/p/open-vm-tools/icon"></center><p>' +
+    								'Name: ' + item.vmname + '<br>' + 
+    								'Status: ' + item.vmstatus + '<br>' + 
+    								'OS: ' + item.vmos + '<br>' + 
+    								'IP: ' + item.vmip + '<br>' + 
+    								'vCPU: ' + item.vmcpu + '<br>' + 
+    								'Memory: ' + item.vmram + '<br>' +
+    								'Hard Disk: ' + jsonvmhdd + '<br>' + 
+    								'</p></li>'
+    							);					
+							});
+                        },
+                 error: function() {
+                          alert("Ajax error!")
+                        }
+      	});
+  	});
+
+});
+</script>
