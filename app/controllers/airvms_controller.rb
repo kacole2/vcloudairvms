@@ -146,7 +146,7 @@ class AirvmsController < ApplicationController
   def destroy
     @airvm.destroy
     respond_to do |format|
-      format.html { redirect_to :root, notice: 'Airvm was successfully destroyed.' }
+      format.html { redirect_to :root, notice: 'Session was successfully destroyed.' }
       format.json { head :no_content }
     end
   end

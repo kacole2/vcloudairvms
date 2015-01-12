@@ -1,4 +1,5 @@
 source 'https://rubygems.org'
+gem 'rails_12factor'
 gem 'thin'
 gem 'fog'
 gem 'attr_encrypted'
