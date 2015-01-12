@@ -1,0 +1,10 @@
+---
+applications:
+- name: vcloudairvms
+  memory: 512M
+  instances: 1
+  path: .
+  domain: cfapps.io
+  command: bundle exec rake db:create db:migrate && bundle exec rails s -p $PORT
+  services:
+  - kcoleman-vcloudairvms-elephantsql

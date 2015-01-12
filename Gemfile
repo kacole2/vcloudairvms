@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+gem 'thin'
 gem 'fog'
 gem 'attr_encrypted'
 gem 'figaro'

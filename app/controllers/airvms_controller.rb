@@ -25,6 +25,7 @@ class AirvmsController < ApplicationController
       )
       @organizations = vcloud.organizations.all
     rescue
+      @airvm.destroy
       redirect_to :root, notice: 'Bad Credentials Supplied. Please Try Again.'
     end
   end
